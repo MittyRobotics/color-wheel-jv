@@ -24,7 +24,7 @@
 
 package com.github.mittyrobotics;
 
-import com.github.mittyrobotics.colorwheel.ColorPistonSubsystem;
+/*import com.github.mittyrobotics.colorwheel.ColorPistonSubsystem;
 import com.github.mittyrobotics.colorwheel.SpinnerSubsystem;
 import com.github.mittyrobotics.conveyor.ConveyorSubsystem;
 import com.github.mittyrobotics.conveyor.IntakeRaiseSubsystem;
@@ -35,29 +35,49 @@ import com.github.mittyrobotics.shooter.TurretSubsystem;
 import com.github.mittyrobotics.util.Compressor;
 import com.github.mittyrobotics.util.Gyro;
 import com.github.mittyrobotics.util.OI;
-import com.github.mittyrobotics.util.SubsystemManager;
+import com.github.mittyrobotics.util.SubsystemManager;*/
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorSensorV3;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import java.awt.*;
 
 /**
  * Robot Class to run the robot code (uses timed robot)
  */
 public class Robot extends TimedRobot {
-    /**
-     * Sets the Robot to loop at 20 ms cycle
-     */
-    public Robot() {
+
+    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+
+    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+    private final ColorMatch m_colorMatcher = new ColorMatch();
+
+    private final Color targetBlue = ColorMatch.makeColor(0, 0, 0);
+    private final Color targetGreen = ColorMatch.makeColor(0, 0, 0);
+    private final Color targetRed = ColorMatch.makeColor(0, 0, 0);
+    private final Color targetYellow = ColorMatch.makeColor(0, 0, 0);
+
+
+   public Robot() {
         super(0.02);
     }
 
-    /**
-     * Initializes all the hardware
-     */
     @Override
     public void robotInit() {
-        SubsystemManager.getInstance().addSubsystems(
+
+       m_colorMatcher.addColorMatch(targetBlue);
+       m_colorMatcher.addColorMatch(targetGreen);
+       m_colorMatcher.addColorMatch(targetRed);
+       m_colorMatcher.addColorMatch(targetYellow);
+
+
+       ColorMatchResult match = m_colorMatcher.matchColor()
+       SubsystemManager.getInstance().addSubsystems(
 //                ConveyorSubsystem.getInstance(),
-                DrivetrainSubsystem.getInstance()
+       DriveTrainSubsystem.getInstance()
 //                IntakeRaiseSubsystem.getInstance(),
 //                IntakeSubsystem.getInstance(),
 //                ShooterSubsystem.getInstance(),
@@ -83,7 +103,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
-        DrivetrainSubsystem.getInstance().brake();
+        DriveTrainSubsystem.getInstance().brake();
     }
 
     /**
@@ -91,7 +111,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        OI.getInstance().initAuton();
+        OI.getInstance().initHardware();
     }
 
     /**
