@@ -37,9 +37,11 @@ import com.github.mittyrobotics.util.Gyro;
 import com.github.mittyrobotics.util.OI;
 import com.github.mittyrobotics.util.SubsystemManager;*/
 import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -68,13 +70,13 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
 
+
        m_colorMatcher.addColorMatch(targetBlue);
        m_colorMatcher.addColorMatch(targetGreen);
        m_colorMatcher.addColorMatch(targetRed);
        m_colorMatcher.addColorMatch(targetYellow);
 
 
-       ColorMatchResult match = m_colorMatcher.matchColor()
        SubsystemManager.getInstance().addSubsystems(
 //                ConveyorSubsystem.getInstance(),
        DriveTrainSubsystem.getInstance()
@@ -88,35 +90,55 @@ public class Robot extends TimedRobot {
         //Compressor.getInstance().initHardware();
     }
 
-    /**
-     * Runs Scheduler for commands and updates the dashboard and OI
-     */
+
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         SubsystemManager.getInstance().updateDashboard();
         OI.getInstance().updateOI();
+
+        Color colorDetected = m_colorSensor.getColor();
+
+        String colorString;
+
+        ColorMatchResult match = m_colorMatcher.matchClosestColor(colorDetected);
+
+        if (colorDetected == targetBlue){
+            colorString = "Blue";
+        }
+        else if (colorDetected == targetGreen) {
+            colorString = "Green";
+        }
+        else if (colorDetected == targetRed) {
+            colorString = "Red";
+        }
+        else if (colorDetected == targetYellow) {
+            colorString = "Yellow";
+        }
+        else {
+            colorString = "Unknown";
+        }
+
+        SmartDashboard.putNumber("Blue", colorDetected.blue);
+        SmartDashboard.putNumber("Green", colorDetected.green);
+        SmartDashboard.putNumber("Red", colorDetected.red);
+        SmartDashboard.putNumber("Confidence", match.confidence);
+        SmartDashboard.putString("Detected Color", colorString);
     }
 
-    /**
-     * Brakes the drivetrain when disabling
-     */
+
     @Override
     public void disabledInit() {
         DriveTrainSubsystem.getInstance().brake();
     }
 
-    /**
-     * Initializes and starts autonomous command
-     */
+
     @Override
     public void autonomousInit() {
         OI.getInstance().initHardware();
     }
 
-    /**
-     * Stops autonomous command and initializes controls
-     */
+
     @Override
     public void teleopInit() {
         OI.getInstance().setupControls();
