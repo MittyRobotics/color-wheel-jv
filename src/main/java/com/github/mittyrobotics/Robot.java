@@ -24,18 +24,18 @@
 
 package com.github.mittyrobotics;
 
-import com.github.mittyrobotics.colorwheel.ColorPistonSubsystem;
-import com.github.mittyrobotics.colorwheel.SpinnerSubsystem;
-import com.github.mittyrobotics.conveyor.ConveyorSubsystem;
-import com.github.mittyrobotics.conveyor.IntakeRaiseSubsystem;
-import com.github.mittyrobotics.conveyor.IntakeSubsystem;
-import com.github.mittyrobotics.drivetrain.DrivetrainSubsystem;
-import com.github.mittyrobotics.shooter.ShooterSubsystem;
-import com.github.mittyrobotics.shooter.TurretSubsystem;
-import com.github.mittyrobotics.util.Compressor;
-import com.github.mittyrobotics.util.Gyro;
-import com.github.mittyrobotics.util.OI;
-import com.github.mittyrobotics.util.SubsystemManager;
+//import com.github.mittyrobotics.colorwheel.ColorPistonSubsystem;
+//import com.github.mittyrobotics.colorwheel.SpinnerSubsystem;
+//import com.github.mittyrobotics.conveyor.ConveyorSubsystem;
+//import com.github.mittyrobotics.conveyor.IntakeRaiseSubsystem;
+//import com.github.mittyrobotics.conveyor.IntakeSubsystem;
+//import com.github.mittyrobotics.drivetrain.DrivetrainSubsystem;
+//import com.github.mittyrobotics.shooter.ShooterSubsystem;
+//import com.github.mittyrobotics.shooter.TurretSubsystem;
+//import com.github.mittyrobotics.util.Compressor;
+//import com.github.mittyrobotics.util.Gyro;
+//import com.github.mittyrobotics.util.OI;
+//import com.github.mittyrobotics.util.SubsystemManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
      * Sets the Robot to loop at 20 ms cycle
      */
     public Robot() {
-        super(0.02);
+//        super(0.02);
     }
 
     /**
@@ -55,15 +55,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        SubsystemManager.getInstance().addSubsystems(
-//                ConveyorSubsystem.getInstance(),
-                DrivetrainSubsystem.getInstance()
-//                IntakeRaiseSubsystem.getInstance(),
-//                IntakeSubsystem.getInstance(),
-//                ShooterSubsystem.getInstance(),
-//                TurretSubsystem.getInstance()
-        );
-        SubsystemManager.getInstance().initHardware();
+//        SubsystemManager.getInstance().addSubsystems(
+////                ConveyorSubsystem.getInstance(),
+//                DrivetrainSubsystem.getInstance()
+////                IntakeRaiseSubsystem.getInstance(),
+////                IntakeSubsystem.getInstance(),
+////                ShooterSubsystem.getInstance(),
+////                TurretSubsystem.getInstance()
+//        );
+//        SubsystemManager.getInstance().initHardware();
 //        Gyro.getInstance().initHardware();
         //Compressor.getInstance().initHardware();
     }
@@ -73,9 +73,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        CommandScheduler.getInstance().run();
-        SubsystemManager.getInstance().updateDashboard();
-        OI.getInstance().updateOI();
+//        CommandScheduler.getInstance().run();
+//        SubsystemManager.getInstance().updateDashboard();
+//        OI.getInstance().updateOI();
     }
 
     /**
@@ -83,7 +83,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
-        DrivetrainSubsystem.getInstance().brake();
+//        DrivetrainSubsystem.getInstance().brake();
     }
 
     /**
@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        OI.getInstance().initAuton();
+//        OI.getInstance().initAuton();
     }
 
     /**
@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopInit() {
-        OI.getInstance().setupControls();
+//        OI.getInstance().setupControls();
     }
 
     /**
