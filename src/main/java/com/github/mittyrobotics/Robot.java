@@ -24,20 +24,16 @@
 
 package com.github.mittyrobotics;
 
-import com.github.mittyrobotics.colorwheel.ColorPistonSubsystem;
-import com.github.mittyrobotics.colorwheel.SpinnerSubsystem;
-import com.github.mittyrobotics.conveyor.ConveyorSubsystem;
-import com.github.mittyrobotics.conveyor.IntakeRaiseSubsystem;
-import com.github.mittyrobotics.conveyor.IntakeSubsystem;
-import com.github.mittyrobotics.drivetrain.DrivetrainSubsystem;
-import com.github.mittyrobotics.shooter.ShooterSubsystem;
-import com.github.mittyrobotics.shooter.TurretSubsystem;
-import com.github.mittyrobotics.util.Compressor;
-import com.github.mittyrobotics.util.Gyro;
-import com.github.mittyrobotics.util.OI;
-import com.github.mittyrobotics.util.SubsystemManager;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorMatch;
 
 /**
  * Robot Class to run the robot code (uses timed robot)
@@ -46,26 +42,30 @@ public class Robot extends TimedRobot {
     /**
      * Sets the Robot to loop at 20 ms cycle
      */
+
+    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+
+    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+
+    private final ColorMatch m_colorMatcher = new ColorMatch();
+
     public Robot() {
         super(0.02);
     }
 
+    private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
+    private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
+    private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
+    private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
     /**
      * Initializes all the hardware
      */
     @Override
     public void robotInit() {
-        SubsystemManager.getInstance().addSubsystems(
-//                ConveyorSubsystem.getInstance(),
-                DrivetrainSubsystem.getInstance()
-//                IntakeRaiseSubsystem.getInstance(),
-//                IntakeSubsystem.getInstance(),
-//                ShooterSubsystem.getInstance(),
-//                TurretSubsystem.getInstance()
-        );
-        SubsystemManager.getInstance().initHardware();
-//        Gyro.getInstance().initHardware();
-        //Compressor.getInstance().initHardware();
+        m_colorMatcher.addColorMatch(kBlueTarget);
+        m_colorMatcher.addColorMatch(kGreenTarget);
+        m_colorMatcher.addColorMatch(kRedTarget);
+        m_colorMatcher.addColorMatch(kYellowTarget);
     }
 
     /**
@@ -73,33 +73,56 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        CommandScheduler.getInstance().run();
-        SubsystemManager.getInstance().updateDashboard();
-        OI.getInstance().updateOI();
+
     }
 
     /**
      * Brakes the drivetrain when disabling
      */
     @Override
-    public void disabledInit() {
-        DrivetrainSubsystem.getInstance().brake();
-    }
+    public void disabledInit() { }
 
     /**
      * Initializes and starts autonomous command
      */
     @Override
-    public void autonomousInit() {
-        OI.getInstance().initAuton();
-    }
+    public void autonomousInit() { }
 
     /**
      * Stops autonomous command and initializes controls
      */
     @Override
-    public void teleopInit() {
-        OI.getInstance().setupControls();
+    public void teleopInit() { }
+
+    @Override
+    public void teleopPeriodic() {
+        Color detectedColor = m_colorSensor.getColor();
+
+        String colorString;
+        ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+
+        if(match.color == kBlueTarget) {
+            colorString = "Blue";
+        }
+        else if(match.color == kRedTarget) {
+            colorString = "Red";
+        }
+        else if(match.color == kGreenTarget) {
+            colorString = "Green";
+        }
+        else if(match.color == kYellowTarget) {
+            colorString = "Yello";
+        }
+        else {
+            colorString = "Unknown";
+        }
+
+
+        SmartDashboard.putNumber("Red", detectedColor.red);
+        SmartDashboard.putNumber("Green", detectedColor.green);
+        SmartDashboard.putNumber("Blue", detectedColor.blue);
+        SmartDashboard.putNumber("Confidence", match.confidence);
+        SmartDashboard.putString("Detected Color", colorString);
     }
 
     /**
@@ -114,8 +137,6 @@ public class Robot extends TimedRobot {
      * Function for testing code
      */
     @Override
-    public void testPeriodic() {
-
-    }
+    public void testPeriodic() { }
 
 }
