@@ -1,8 +1,41 @@
 package com.github.mittyrobotics;
 
-public class OI {
-    public static DriveTrainSubsystem getInstance() {
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
-        return getInstance();
+public class OI {
+
+    XboxController controller;
+
+    private static OI instance;
+
+    private OI() {
+
+    }
+
+    public static OI getInstance() {
+        if (instance == null) {
+            instance = new OI();
+        }
+        return instance;
+    }
+
+    public XboxController getController() {
+        return controller;
+    }
+
+    public void initOI() {
+        controller = new XboxController(0);
+    }
+
+    public void updateOI() {
+
+    }
+
+    public void setupControls() {
+
+    }
+
+    public void initHardware() {
     }
 }

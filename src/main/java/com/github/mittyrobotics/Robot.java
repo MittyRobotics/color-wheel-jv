@@ -36,11 +36,16 @@ import com.github.mittyrobotics.util.Compressor;
 import com.github.mittyrobotics.util.Gyro;
 import com.github.mittyrobotics.util.OI;
 import com.github.mittyrobotics.util.SubsystemManager;*/
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -51,6 +56,11 @@ import java.awt.*;
  * Robot Class to run the robot code (uses timed robot)
  */
 public class Robot extends TimedRobot {
+
+    private static XboxController controller;
+
+    static WPI_TalonSRX colorWheel = new WPI_TalonSRX(0);
+    static DoubleSolenoid doubleSolenoid = new DoubleSolenoid(0, 0, 0);
 
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
@@ -88,10 +98,36 @@ public class Robot extends TimedRobot {
         SubsystemManager.getInstance().initHardware();
 //        Gyro.getInstance().initHardware();
         //Compressor.getInstance().initHardware();
+
+        execute();
+    }
+
+    public void execute() {
+
+        boolean pressedY = controller.getYButtonPressed();
+
+        if (pressedY) {
+            doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+
+            velocityPID();
+        }
+        robotPeriodic();
+
+    }
+
+    public static void velocityPID() {
+
+        double feedForward = 0; //temporary value
+        double desiredVelocity = 0; //temporary constant until I know what value makes 50 rpm
+
+        PIDController colorWheelMotor = new PIDController(1, 0, 0);
+
+        double output = colorWheelMotor.calculate(colorWheel.getSelectedSensorVelocity());
+
+        colorWheel.set((feedForward * desiredVelocity) + output);
     }
 
 
-    @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         SubsystemManager.getInstance().updateDashboard();
@@ -125,6 +161,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Confidence", match.confidence);
         SmartDashboard.putString("Detected Color", colorString);
     }
+
+
 
 
     @Override
