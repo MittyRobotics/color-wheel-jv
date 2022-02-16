@@ -11,7 +11,7 @@ import com.revrobotics.ColorMatchResult;
 public class ColorWheel extends SubsystemBase {
     private static ColorWheel instance;
 
-    private WPI_TalonSRX talon;
+    private WPI_TalonSRX talon = new WPI_TalonSRX(20);
 
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
@@ -26,7 +26,6 @@ public class ColorWheel extends SubsystemBase {
         return instance == null ? instance = new ColorWheel() : instance;
     }
     public void initHardware(){
-        talon = new WPI_TalonSRX(20);
         matcher.addColorMatch(blue);
         matcher.addColorMatch(green);
         matcher.addColorMatch(red);
