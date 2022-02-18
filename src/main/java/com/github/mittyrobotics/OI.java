@@ -4,14 +4,12 @@ import edu.wpi.first.wpilibj.*;
 
 public class OI{
     private static OI instance;
-    private XboxController controller;
+    private XboxController controller = new XboxController(Constants.controllerId);
 
     public static OI getInstance(){
         return instance == null ? instance = new OI() : instance;
     }
-    public void initOI(){
-        controller = new XboxController(0);
-    }
+    public void initOI(){}
     public XboxController getController(){
         return controller;
     }

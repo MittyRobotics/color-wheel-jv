@@ -1,17 +1,22 @@
 package com.github.mittyrobotics;
 
+import com.github.mittyrobotics.Subsystems.ColorWheel;
+import com.github.mittyrobotics.Subsystems.Pistons;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
 
     public Robot() { super(0.02); }
+
 
     /**
      * Initializes all the hardware
      */
     @Override
     public void robotInit() {
-
+        ColorWheel.getInstance().initHardware();
+        Pistons.getInstance().initHardware();
     }
 
 
@@ -20,7 +25,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-
+        CommandScheduler.getInstance().run();
     }
 
 
