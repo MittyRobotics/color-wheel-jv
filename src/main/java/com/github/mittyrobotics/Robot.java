@@ -113,6 +113,9 @@ public class Robot extends TimedRobot {
         }
         robotPeriodic();
 
+        colorWheel.set(0);
+        doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+
     }
 
     public static void velocityPID() {
