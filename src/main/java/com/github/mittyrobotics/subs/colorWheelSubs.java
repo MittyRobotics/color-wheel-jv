@@ -46,5 +46,8 @@ public class colorWheelSubs extends SubsystemBase {
     public void setTalon(double speed){
         talon.set(speed);
     }
+    public int getSelectedSensorVelo(){
+        return talon.getSelectedSensorVelocity();
+    }
 
 }
