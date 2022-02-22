@@ -57,6 +57,8 @@ import java.awt.*;
  */
 public class Robot extends TimedRobot {
 
+
+
     private static XboxController controller;
 
     static WPI_TalonSRX colorWheel = new WPI_TalonSRX(0);
@@ -72,6 +74,11 @@ public class Robot extends TimedRobot {
     private final Color targetRed = ColorMatch.makeColor(0, 0, 0);
     private final Color targetYellow = ColorMatch.makeColor(0, 0, 0);
 
+    Color targetColor = targetBlue;
+
+
+    PIDController colorWheelMotor = new PIDController(1, 0, 0);
+
 
    public Robot() {
         super(0.02);
@@ -85,6 +92,7 @@ public class Robot extends TimedRobot {
        m_colorMatcher.addColorMatch(targetGreen);
        m_colorMatcher.addColorMatch(targetRed);
        m_colorMatcher.addColorMatch(targetYellow);
+
 
 
        SubsystemManager.getInstance().addSubsystems(
@@ -106,24 +114,28 @@ public class Robot extends TimedRobot {
 
         boolean pressedY = controller.getYButtonPressed();
 
-        if (pressedY) {
+        if (pressedY ) {
             doubleSolenoid.set(DoubleSolenoid.Value.kForward);
 
             velocityPID();
         }
         robotPeriodic();
 
-        colorWheel.set(0);
-        doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+        if (targetColor == targetBlue) {
+
+            colorWheel.set(0);
+            doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+        }
 
     }
 
-    public static void velocityPID() {
+
+    public void velocityPID() {
 
         double feedForward = 0; //temporary value
         double desiredVelocity = 0; //temporary constant until I know what value makes 50 rpm
 
-        PIDController colorWheelMotor = new PIDController(1, 0, 0);
+
 
         double output = colorWheelMotor.calculate(colorWheel.getSelectedSensorVelocity());
 
