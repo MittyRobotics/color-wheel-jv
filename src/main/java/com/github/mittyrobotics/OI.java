@@ -21,7 +21,6 @@ public class OI {
         return controller;
     }
 
-
     public boolean getAButtonPressed() {
         boolean pressed = controller.getAButtonPressed();
         return pressed;
