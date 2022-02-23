@@ -36,6 +36,8 @@ package com.github.mittyrobotics;
 //import com.github.mittyrobotics.util.Gyro;
 //import com.github.mittyrobotics.util.OI;
 //import com.github.mittyrobotics.util.SubsystemManager;
+import com.github.mittyrobotics.commands.colorWheelCommand;
+import com.github.mittyrobotics.subs.colorWheelSubs;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -55,6 +57,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        colorWheelSubs.getInstance().initHardware();
+        colorWheelSubs.getInstance().initController();
+
 //        SubsystemManager.getInstance().addSubsystems(
 ////                ConveyorSubsystem.getInstance(),
 //                DrivetrainSubsystem.getInstance()
@@ -73,6 +78,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
 //        CommandScheduler.getInstance().run();
 //        SubsystemManager.getInstance().updateDashboard();
 //        OI.getInstance().updateOI();
@@ -99,6 +105,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopInit() {
+        colorWheelSubs.getInstance().setDefaultCommand(new colorWheelCommand());
+
 //        OI.getInstance().setupControls();
     }
 
