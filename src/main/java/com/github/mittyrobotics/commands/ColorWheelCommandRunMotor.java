@@ -16,10 +16,15 @@ public class ColorWheelCommandRunMotor extends CommandBase {
     public void initialize() {
         PIDController pid = new PIDController(0, 0, 0);;
         pid.setSetpoint(50);
+
+        //spin at 50rpm?
     }
 
     @Override
     public void execute() {
+        //run motor?
+        //how do you spin two full rotations
+
         Color detectedColor = ColorWheel.getInstance().getColorSensor().getColor();
         ColorMatchResult match = ColorWheel.getInstance().getColorMatcher().matchClosestColor(detectedColor);
 
@@ -42,7 +47,7 @@ public class ColorWheelCommandRunMotor extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
+        ColorWheel.getInstance().setMotors(0);
     }
 
     @Override

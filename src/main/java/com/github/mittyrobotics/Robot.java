@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        Color detectedColor = m_colorSensor.getColor();
+        /*Color detectedColor = m_colorSensor.getColor();
 
         String colorString;
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Green", detectedColor.green);
         SmartDashboard.putNumber("Blue", detectedColor.blue);
         SmartDashboard.putNumber("Confidence", match.confidence);
-        SmartDashboard.putString("Detected Color", colorString);
+        SmartDashboard.putString("Detected Color", colorString);*/
     }
 
     /**
