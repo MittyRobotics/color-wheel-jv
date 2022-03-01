@@ -24,6 +24,7 @@ public class ColorWheelCommandRunMotor extends CommandBase {
     public void execute() {
         //run motor?
         //how do you spin two full rotations
+        //use controller?
 
         Color detectedColor = ColorWheel.getInstance().getColorSensor().getColor();
         ColorMatchResult match = ColorWheel.getInstance().getColorMatcher().matchClosestColor(detectedColor);
