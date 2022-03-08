@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
         SubsystemManager.getInstance().initHardware();
 //        Gyro.getInstance().initHardware();
         //Compressor.getInstance().initHardware();
+        //hi
     }
 
     /**
